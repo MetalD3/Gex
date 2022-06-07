@@ -24,7 +24,7 @@ int main()
 
 
 
-	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
+	// Create a GLFWwindow object of 800 by 800 pixels, naming it "Gex"
 	GLFWwindow* window = glfwCreateWindow(800, 800, "Gex", NULL, NULL);
 	// Error check if the window fails to create
 	if (window == NULL)
@@ -48,7 +48,7 @@ int main()
 
 	
 	
-
+	// Initializing ImGui
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -56,10 +56,10 @@ int main()
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
 
-	char str0[128] = "Hello \n";
-	std::string s{ "" };
-	static bool read_only = false;
-	char str1[128] = " ";
+	char str0[128] = ""; //  editor space character array
+	std::string s{ "" }; // main editor space string
+	static bool read_only = false; // A read only confirmation for the flags
+	char str1[128] = " "; // Filename string
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
@@ -69,14 +69,15 @@ int main()
 		// Clean the back buffer and assign the new color to it
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		
+		// Generates a new frame
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		ImGui::Begin("Editor");
-		ImGui::Text("First");
+		//ImGui::Text("First");    Ignore this
 		ImGui::InputText("Enter filename", str1, IM_ARRAYSIZE(str1));
 		ImGui::InputTextMultiline("Input", str0, IM_ARRAYSIZE(str0), ImVec2(-1.0f, ImGui::GetTextLineHeight() * 16), ImGuiInputTextFlags_AllowTabInput | (read_only ? ImGuiInputTextFlags_ReadOnly : 0));
+		// Creating and functionalizing a save button all at once
 		if (ImGui::Button("Save"))
 		{
 			std::string filename = str1;
@@ -94,6 +95,7 @@ int main()
 		glfwPollEvents();
 	}
 
+	
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
