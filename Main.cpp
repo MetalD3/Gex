@@ -7,6 +7,13 @@
 #include<GLFW/glfw3.h>
 #include<glad/glad.h>
 
+
+
+
+
+
+
+
 int main()
 {
 	// Initialize GLFW
@@ -58,8 +65,10 @@ int main()
 
 	char str0[128] = ""; //  editor space character array
 	std::string s{ "" }; // main editor space string
-	static bool read_only = false; // A read only confirmation for the flags
-	char str1[128] = " "; // Filename string
+	bool read_only = false; // A read only confirmation for the flags
+	char str1[128] = "Filepath"; // Filename string
+	bool isclicked = false; //Checks for clicks
+	float wid = 800.0f; float hei = 800.0f;
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
@@ -73,19 +82,24 @@ int main()
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGui::SetNextWindowSize(ImVec2((float)wid, (float)hei));
 		ImGui::Begin("Editor");
-		//ImGui::Text("First");    Ignore this
-		ImGui::InputText("Enter filename", str1, IM_ARRAYSIZE(str1));
-		ImGui::InputTextMultiline("Input", str0, IM_ARRAYSIZE(str0), ImVec2(-1.0f, ImGui::GetTextLineHeight() * 16), ImGuiInputTextFlags_AllowTabInput | (read_only ? ImGuiInputTextFlags_ReadOnly : 0));
-		// Creating and functionalizing a save button all at once
 		if (ImGui::Button("Save"))
+		{
+			isclicked = true;
+		}
+		//ImGui::Text("First");    Ignore this
+		ImGui::InputText("Enter path with filename", str1, IM_ARRAYSIZE(str1));
+		ImGui::InputTextMultiline("Input", str0, IM_ARRAYSIZE(str0), ImVec2(-1.0f, ImGui::GetTextLineHeight() * 64), ImGuiInputTextFlags_AllowTabInput | (read_only ? ImGuiInputTextFlags_ReadOnly : 0));
+		// Creating and functionalizing a save button all at once
+		if (isclicked)
 		{
 			std::string filename = str1;
 			std::ofstream file(filename.c_str());
 			s = str0;
 			file << s;
 			file.close();
-			
+			isclicked = false;
 		}
 		ImGui::End();
 		ImGui::Render();
